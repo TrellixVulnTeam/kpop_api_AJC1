@@ -44,19 +44,26 @@ class Crawler(object):
                     macrotextoficha = h.find_next_sibling()
                     for li in macrotextoficha.find_all('li'):
                         if li.find('ul'):
-
-                            print()
+                            print("con ul")
+                            print([li.text])
 
                            # titulo_seccion = re.match("(w+)\:[\s.+|\s\n.+|\s.+.]", li.text)
+                            titulo_seccion_match = re.match("(\w+|.+)\:[\s[\n.+|.+]|\n[\n.+|.+]]]", li.text)
+                            try:
+                                titulo_seccion = titulo_seccion_match.group(1)
 
-                           # print([li.text])
-                           # titulo_seccion = re.match("(\w+|.+)\:[\s[\n.+|.+]|\n[\n.+|.+]]]", li.text)
-                           # try:
-                           #     print(titulo_seccion.groups())
-                           # except AttributeError:
-                           #     print("El nombre de la sección de la ficha de información básica no está bien parseado."
-                           #           "La cadena es: {0}".format(li.text))
-                        print(li.text)
+                                #Casuistica para ver de cual de las secciones se trata
+                                if titulo_seccion.lower() == "nombre":
+                                    #TODO PONER LA FUNCION DE EXTRAE_NOMBRES_ALTERNATIVOS ABAJO, AUNQUE HABRA QUE MOVERLA A UTIL PARA QUE TE DEJE DE PRUEBA
+                                    nombres_alternativos = [for frase in li.text.split("\n") if contiene_nacionalidad(frase)]
+                                print(titulo_seccion)
+                                # titulo_seccion = titulo_seccion.group(0)
+                            except AttributeError:
+                                print("El nombre de la sección de la ficha de información básica no está bien parseado."
+                                     "La cadena es: {0}".format(li.text))
+                        else:
+                            print("sin ul")
+                            print([li.text])
                         # print('ul de lis')
                         # print(li.find_all('ul'))
 
